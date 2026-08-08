@@ -12,5 +12,5 @@
     Cache-Control = "public, max-age=86400"
 
 # After you host alamdar-contract/backend publicly, set in Netlify env:
-#   VITE_API_URL=https://YOUR_PUBLIC_BACKEND
+#   VITE_API_URL=https://alamdar-backend1.onrender.com
 # then rebuild. Until then /api/* will 404 on this static site.
