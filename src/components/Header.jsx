@@ -1,18 +1,39 @@
+import logo from "../assets/images/logo.png";
+
 function Header() {
   return (
-    <header className="glass header">
-      <div className="header-top">
-        <div className="crest">⚜</div>
-        <div>
-          <h1>Alamdar</h1>
-          <p>اهتزاز پرچم ارزش‌ها در شبکه بلاکچین</p>
+    <header className="header glass">
+
+      <div className="logo-area">
+
+        <img
+          src={logo}
+          alt="Alamdar Logo"
+          className="logo-image"
+        />
+
+        <div className="header-text">
+
+          <h1 className="project-title">
+            ALAMDAR
+          </h1>
+
+          <h2 className="project-verse">
+            قُومُوا لِلَّهِ
+          </h2>
+
+          <p className="project-slogan">
+            اهتزاز پرچم ارزش‌ها در شبکه بلاکچین
+          </p>
+
+          <p className="project-desc">
+            جایی که یاد قهرمانان، در بلاکچین جاودانه می‌شود
+          </p>
+
         </div>
+
       </div>
 
-      <p>
-        مجموعه‌ی ۱۲٬۶۵۰ NFT روی TON با فضای تیره و طلایی. خرید با TON انجام می‌شود و
-        Reveal بعد از پایان فروش اولیه فعال می‌شود.
-      </p>
     </header>
   );
 }

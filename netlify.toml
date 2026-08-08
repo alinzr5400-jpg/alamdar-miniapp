@@ -1,0 +1,16 @@
+[[headers]]
+  for = "/tonconnect-manifest.json"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, OPTIONS"
+    Cache-Control = "public, max-age=60"
+
+[[headers]]
+  for = "/tonconnect-icon.png"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Cache-Control = "public, max-age=86400"
+
+# After you host alamdar-contract/backend publicly, set in Netlify env:
+#   VITE_API_URL=https://YOUR_PUBLIC_BACKEND
+# then rebuild. Until then /api/* will 404 on this static site.

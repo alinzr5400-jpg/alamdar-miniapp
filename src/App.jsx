@@ -1,5 +1,4 @@
 import HomePage from "./pages/HomePage";
-
 import "./styles/theme.css";
 
 function App() {

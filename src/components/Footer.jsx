@@ -1,10 +1,29 @@
 function Footer() {
   return (
     <footer className="glass footer">
-      <div><strong>Alamdar</strong> بر بستر TON</div>
-      <div>۱۲۶۵۰ NFT</div>
-      <div>«سهم تو از تمدن نوین اسلامی در فضای مجازی چیست؟»</div>
-      <div>«قُومُوا لِلَّهِ؛ قیام دیجیتال در سنگر فناوری»</div>
+
+      <div className="footer-line"></div>
+
+      <p className="footer-main">
+        « قُومُوا لِلَّهِ؛ قیام دیجیتال در سنگر فناوری »
+      </p>
+
+      <p className="footer-sub">
+        سهم تو از تمدن نوین اسلامی در فضای مجازی چیست؟
+      </p>
+
+      <div className="footer-info">
+
+        <div>🟡 Powered by TON</div>
+
+        <div>🟡 12650 NFT Collection</div>
+
+        <div>🟡 Made with ❤️ in Iran</div>
+
+      </div>
+
+      <div className="footer-line"></div>
+
     </footer>
   );
 }

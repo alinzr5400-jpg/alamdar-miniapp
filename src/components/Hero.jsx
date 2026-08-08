@@ -1,6 +1,8 @@
-import { FaWallet, FaShoppingCart } from "react-icons/fa";
+import { FaShoppingCart } from "react-icons/fa";
+import ConnectWallet from "./ConnectWallet";
+import WalletInfo from "./WalletInfo";
 
-function Hero() {
+function Hero({ openPayment }) {
   return (
     <section className="glass hero">
 
@@ -8,11 +10,11 @@ function Hero() {
 
       <h2>علمدار</h2>
 
-      <h3>اهتزاز پرچم ارزش‌ها در شبکه بلاکچین</h3>
+      <h3> خیمه دیجیتال روایت های ماندگار شهدای ایران</h3>
 
       <p>
         نخستین مجموعه کلکسیونی شامل ۱۲۶۵۰ NFT بر بستر TON.
-        کاربران پس از پایان فروش اولیه، کارت خود را در مرحله Reveal مشاهده خواهند کرد.
+        کاربران پس از پایان فروش اولیه، کارت NFT خود را در مرحله Reveal یا آشکار سازی مشاهده خواهند کرد.
       </p>
 
       <div className="stats">
@@ -39,19 +41,17 @@ function Hero() {
 
       </div>
 
-      <div className="actions">
+ <div className="actions">
 
-        <button className="gold-btn">
-          <FaWallet />
-          اتصال کیف پول
-        </button>
+  <ConnectWallet />
 
-        <button className="ghost-btn">
-          <FaShoppingCart />
-          شروع خرید
-        </button>
+  <button className="ghost-btn">
+    آموزش اتصال
+  </button>
 
-      </div>
+</div>
+
+      <WalletInfo />
 
     </section>
   );

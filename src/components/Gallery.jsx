@@ -1,34 +1,57 @@
+import { useEffect, useState } from "react";
 import NFTCard from "./NFTCard";
-
-const sampleCards = [
-  { id: 1, name: "نمونه کارت ۱", role: "افسانه‌ای", rarity: "Legendary" },
-  { id: 2, name: "نمونه کارت ۲", role: "افسانه‌ای", rarity: "Legendary" },
-  { id: 3, name: "نمونه کارت ۳", role: "اسطوره‌ای", rarity: "Mythical" },
-  { id: 4, name: "نمونه کارت ۴", role: "اسطوره‌ای", rarity: "Mythical" },
-  { id: 5, name: "نمونه کارت ۵", role: "منحصربه‌فرد", rarity: "Unique" },
-  { id: 6, name: "نمونه کارت ۶", role: "منحصربه‌فرد", rarity: "Unique" },
-];
+import { fetchGallery } from "../services/api";
+import { useSale } from "../context/SaleContext";
 
 function Gallery() {
+  const sale = useSale();
+  const [items, setItems] = useState([]);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let alive = true;
+    fetchGallery(6)
+      .then((data) => {
+        if (!alive) return;
+        setItems(data.items || []);
+        setError(null);
+      })
+      .catch((err) => {
+        if (!alive) return;
+        setError(err instanceof Error ? err.message : "خطا در گالری");
+      });
+    return () => {
+      alive = false;
+    };
+  }, [sale.reveal]);
+
   return (
     <section className="glass gallery">
       <div className="gallery-head">
         <div>
           <h3>گالری کارت‌ها</h3>
-          <p>فعلاً نمونه‌های اولیه برای چیدمان صفحه. بعداً دیتا کامل ۱۱۴ شخصیت وارد می‌شود.</p>
+          <p>
+            {sale.reveal
+              ? "متادیتای واقعی از بک‌اند خوانده می‌شود."
+              : "قبل از Reveal تصاویر مخفی نمایش داده می‌شوند."}
+          </p>
         </div>
-
-        <span className="badge">Locked Gallery</span>
+        <span className="badge">
+          {sale.reveal ? "Revealed" : "Locked Gallery"}
+        </span>
       </div>
 
+      {error && <p className="countdown-text">{error}</p>}
+
       <div className="grid">
-        {sampleCards.map((card) => (
+        {items.map((card) => (
           <NFTCard
             key={card.id}
             id={card.id}
             name={card.name}
             role={card.role}
             rarity={card.rarity}
+            image={card.image}
           />
         ))}
       </div>
