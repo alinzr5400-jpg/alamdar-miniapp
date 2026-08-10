@@ -23,7 +23,7 @@ function Gallery() {
     return () => {
       alive = false;
     };
-  }, [sale.reveal]);
+  }, [sale.reveal, sale.minted]);
 
   return (
     <section className="glass gallery">

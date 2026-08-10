@@ -5,7 +5,10 @@ import ReactDOM from "react-dom/client";
 import { TonConnectUIProvider } from "@tonconnect/ui-react";
 
 import App from "./App";
+import { initTelegramWebApp } from "./telegram";
 import "./index.css";
+
+initTelegramWebApp();
 
 // Fixed public HTTPS manifest so Tonkeeper (mobile/extension) can always load it.
 const DEFAULT_MANIFEST_URL =

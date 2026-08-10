@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { fetchSaleConfig } from "../services/api";
 import { NFT_PRICE, MIN_BUY, MAX_BUY, TOTAL_NFT } from "../config/constants";
 
@@ -24,6 +24,26 @@ const fallback = {
 export function SaleProvider({ children }) {
   const [sale, setSale] = useState(fallback);
 
+  const refreshSale = useCallback(async () => {
+    try {
+      const data = await fetchSaleConfig();
+      setSale({
+        ...fallback,
+        ...data,
+        loading: false,
+        error: null,
+      });
+      return data;
+    } catch (err) {
+      setSale((prev) => ({
+        ...prev,
+        loading: false,
+        error: err instanceof Error ? err.message : "Failed to load sale",
+      }));
+      return null;
+    }
+  }, []);
+
   useEffect(() => {
     let alive = true;
 
@@ -48,7 +68,7 @@ export function SaleProvider({ children }) {
     }
 
     load();
-    const timer = setInterval(load, 30000);
+    const timer = setInterval(load, 60000);
     return () => {
       alive = false;
       clearInterval(timer);
@@ -56,7 +76,9 @@ export function SaleProvider({ children }) {
   }, []);
 
   return (
-    <SaleContext.Provider value={sale}>{children}</SaleContext.Provider>
+    <SaleContext.Provider value={{ ...sale, refreshSale }}>
+      {children}
+    </SaleContext.Provider>
   );
 }
 

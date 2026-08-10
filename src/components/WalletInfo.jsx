@@ -1,5 +1,11 @@
 import { useWalletContext } from "../context/WalletContext";
 
+function formatNetwork(chain) {
+  if (chain === "-3" || chain === -3) return "Testnet";
+  if (chain === "-239" || chain === -239) return "Mainnet";
+  return chain || "—";
+}
+
 function WalletInfo() {
   const {
     connected,
@@ -25,7 +31,6 @@ function WalletInfo() {
 
   return (
     <div className="glass wallet-info">
-
       <h3>کیف پول متصل شد ✅</h3>
 
       <p>
@@ -37,9 +42,8 @@ function WalletInfo() {
       </p>
 
       <p>
-        <strong>Network:</strong> {network}
+        <strong>Network:</strong> {formatNetwork(network)}
       </p>
-
     </div>
   );
 }
