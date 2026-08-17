@@ -4,7 +4,7 @@ export const PROJECT = {
   NFT_PRICE: 0.5,
   MIN_BUY: 2,
   MAX_BUY: 10,
-  TOTAL_SUPPLY: 12652,
+  TOTAL_SUPPLY: 16120,
   COLLECTION_NAME: "Alamdar NFT",
   SYMBOL: "ALM",
   REVEAL: false,

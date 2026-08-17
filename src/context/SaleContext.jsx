@@ -10,7 +10,7 @@ const fallback = {
   maxBuy: MAX_BUY,
   totalSupply: TOTAL_NFT,
   minted: 0,
-  remaining: 12652,
+  remaining: 16120,
   reveal: false,
   saleOpen: true,
   saleStartsAt: null,
