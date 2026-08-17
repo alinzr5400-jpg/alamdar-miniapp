@@ -7,6 +7,15 @@ function rarityClass(rarity) {
   return "";
 }
 
+function toIpfsFallback(url) {
+  if (!url || typeof url !== "string") return null;
+  const m = url.match(/\/ipfs\/([^/?#]+)(?:\/(.*))?$/i);
+  if (!m) return null;
+  const cid = m[1];
+  const path = m[2] ? `/${m[2]}` : "";
+  return `https://ipfs.io/ipfs/${cid}${path}`;
+}
+
 function NFTCard({ id, name, role, rarity, image }) {
   const tier = rarityClass(rarity);
 
@@ -18,7 +27,21 @@ function NFTCard({ id, name, role, rarity, image }) {
       </div>
 
       {image ? (
-        <img className="nft-image" src={image} alt={name} loading="lazy" />
+        <img
+          className="nft-image"
+          src={image}
+          alt={name}
+          loading="lazy"
+          onError={(e) => {
+            const el = e.currentTarget;
+            const fallback = toIpfsFallback(el.src);
+            if (fallback && el.src !== fallback) {
+              el.src = fallback;
+              return;
+            }
+            el.style.opacity = "0.35";
+          }}
+        />
       ) : null}
 
       <h4 className="nft-name">{name}</h4>
