@@ -62,7 +62,8 @@ function Countdown() {
       <p className="countdown-text">{statusText}</p>
       <p className="countdown-text">
         مینت‌شده: {sale.minted?.toLocaleString?.() ?? "—"} | شبکه:{" "}
-        {sale.network ?? "—"}
+        {sale.network ?? "—"} | Reveal:{" "}
+        {sale.reveal ? "فعال" : "خاموش"}
       </p>
     </section>
   );

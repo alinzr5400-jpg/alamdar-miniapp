@@ -7,10 +7,18 @@ function Gallery() {
   const sale = useSale();
   const [items, setItems] = useState([]);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let alive = true;
-    fetchGallery(6)
+    setLoading(true);
+
+    const limit = Math.min(
+      Math.max(Number(sale.minted) || 6, 2),
+      12
+    );
+
+    fetchGallery(limit)
       .then((data) => {
         if (!alive) return;
         setItems(data.items || []);
@@ -19,7 +27,11 @@ function Gallery() {
       .catch((err) => {
         if (!alive) return;
         setError(err instanceof Error ? err.message : "خطا در گالری");
+      })
+      .finally(() => {
+        if (alive) setLoading(false);
       });
+
     return () => {
       alive = false;
     };
@@ -32,16 +44,21 @@ function Gallery() {
           <h3>گالری کارت‌ها</h3>
           <p>
             {sale.reveal
-              ? "متادیتای واقعی از بک‌اند خوانده می‌شود."
-              : "قبل از Reveal تصاویر مخفی نمایش داده می‌شوند."}
+              ? "کارت‌های مینت‌شده با رریته و تصویر واقعی نمایش داده می‌شوند."
+              : "قبل از Reveal فقط تصویر مخفی نشان داده می‌شود."}
           </p>
         </div>
-        <span className="badge">
-          {sale.reveal ? "Revealed" : "Locked Gallery"}
+        <span className={`badge ${sale.reveal ? "badge-reveal-on" : "badge-reveal-off"}`}>
+          {sale.reveal ? "Reveal فعال" : "قفل تا Reveal"}
         </span>
       </div>
 
       {error && <p className="countdown-text">{error}</p>}
+      {loading && <p className="countdown-text">در حال بارگذاری گالری…</p>}
+
+      {!loading && items.length === 0 && (
+        <p className="countdown-text">هنوز کارتی برای نمایش نیست.</p>
+      )}
 
       <div className="grid">
         {items.map((card) => (

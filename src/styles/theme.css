@@ -257,6 +257,58 @@ button {
   background: rgba(0, 0, 0, 0.25);
 }
 
+.badge-reveal-on {
+  background: rgba(46, 204, 113, 0.14);
+  border-color: rgba(46, 204, 113, 0.35);
+  color: #8dffb0;
+}
+
+.badge-reveal-off {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.nft-card.rarity-legendary {
+  border-color: rgba(212, 175, 55, 0.45);
+}
+
+.nft-card.rarity-mythic {
+  border-color: rgba(155, 89, 255, 0.45);
+}
+
+.nft-card.rarity-unique {
+  border-color: rgba(52, 152, 219, 0.45);
+}
+
+.nft-card.rarity-hidden {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.badge.rarity-legendary {
+  background: rgba(212, 175, 55, 0.16);
+  border-color: rgba(212, 175, 55, 0.35);
+  color: #f0d78c;
+}
+
+.badge.rarity-mythic {
+  background: rgba(155, 89, 255, 0.16);
+  border-color: rgba(155, 89, 255, 0.35);
+  color: #d2b4ff;
+}
+
+.badge.rarity-unique {
+  background: rgba(52, 152, 219, 0.16);
+  border-color: rgba(52, 152, 219, 0.35);
+  color: #9fd4ff;
+}
+
+.badge.rarity-hidden {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.65);
+}
+
 .nft-card-top {
   display: flex;
   justify-content: space-between;

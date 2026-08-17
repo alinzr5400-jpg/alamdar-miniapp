@@ -7,7 +7,7 @@ export const PROJECT = {
   TOTAL_SUPPLY: 16120,
   COLLECTION_NAME: "Alamdar NFT",
   SYMBOL: "ALM",
-  REVEAL: false,
+  REVEAL: true,
   ROYALTY: 5,
 };
 

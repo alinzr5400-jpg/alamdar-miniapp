@@ -1,58 +1,63 @@
-import { FaShoppingCart } from "react-icons/fa";
 import ConnectWallet from "./ConnectWallet";
 import WalletInfo from "./WalletInfo";
+import { useSale } from "../context/SaleContext";
+import { TOTAL_NFT, NFT_PRICE, MIN_BUY, MAX_BUY } from "../config/constants";
 
-function Hero({ openPayment }) {
+function Hero() {
+  const sale = useSale();
+  const total = sale.totalSupply ?? TOTAL_NFT;
+  const price = sale.mintPrice ?? NFT_PRICE;
+  const minBuy = sale.minBuy ?? MIN_BUY;
+  const maxBuy = sale.maxBuy ?? MAX_BUY;
+  const revealed = Boolean(sale.reveal);
+
   return (
     <section className="glass hero">
-
       <span className="badge">ALAMDAR NFT COLLECTION</span>
 
       <h2>علمدار</h2>
 
-      <h3> خیمه دیجیتال روایت های ماندگار شهدای ایران</h3>
+      <h3>خیمه دیجیتال روایت‌های ماندگار شهدای ایران</h3>
 
       <p>
-        نخستین مجموعه کلکسیونی شامل ۱۲۶۵۰ NFT بر بستر TON.
-        کاربران پس از پایان فروش اولیه، کارت NFT خود را در مرحله Reveal یا آشکار سازی مشاهده خواهند کرد.
+        مجموعه کلکسیونی شامل {total.toLocaleString("fa-IR")} NFT بر بستر TON —
+        Legendary، Mythic و Unique.
+        {revealed
+          ? " Reveal فعال است؛ کارت‌های مینت‌شده با تصویر واقعی دیده می‌شوند."
+          : " تا قبل از Reveal تصاویر مخفی هستند."}
       </p>
 
       <div className="stats">
-
         <div className="stat">
-          <strong>12650</strong>
+          <strong>{total.toLocaleString("en-US")}</strong>
           <span>کل NFT</span>
         </div>
 
         <div className="stat">
-          <strong>0.5 TON</strong>
+          <strong>{price} TON</strong>
           <span>قیمت هر NFT</span>
         </div>
 
         <div className="stat">
-          <strong>2 NFT</strong>
+          <strong>{minBuy} NFT</strong>
           <span>حداقل خرید</span>
         </div>
 
         <div className="stat">
-          <strong>10 NFT</strong>
+          <strong>{maxBuy} NFT</strong>
           <span>حداکثر خرید</span>
         </div>
-
       </div>
 
- <div className="actions">
+      <div className="actions">
+        <ConnectWallet />
 
-  <ConnectWallet />
-
-  <button className="ghost-btn">
-    آموزش اتصال
-  </button>
-
-</div>
+        <button type="button" className="ghost-btn">
+          آموزش اتصال
+        </button>
+      </div>
 
       <WalletInfo />
-
     </section>
   );
 }
