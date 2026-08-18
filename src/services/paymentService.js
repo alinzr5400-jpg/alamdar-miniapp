@@ -4,6 +4,21 @@ function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
 }
 
+function friendlyTonConnectError(err) {
+  const raw = err instanceof Error ? err.message : String(err);
+  if (/getClass\(\)|NullPointerException|null object reference/i.test(raw)) {
+    return (
+      "خطای کیف پول اندروید (TonConnect). یک‌بار کیف را Disconnect کنید، دوباره وصل کنید، " +
+      "مطمئن شوید Tonkeeper روی Testnet است، بعد دوباره مینت را بزنید. " +
+      "اگر باز خطا بود، از Tonkeeper دسکتاپ/مرورگر امتحان کنید."
+    );
+  }
+  if (/Failed to fetch/i.test(raw)) {
+    return "ارتباط با سرور قطع شد (احتمالاً بیدار شدن Render). چند ثانیه صبر کنید و دوباره بزنید.";
+  }
+  return raw || "پرداخت یا مینت لغو شد.";
+}
+
 /**
  * TonConnect payment → backend confirm/mint.
  * PublicMint may need a few confirm retries while TonAPI indexes the new items.
@@ -25,6 +40,15 @@ export async function startPayment({
   }
 
   try {
+    // Wake backend (Render free cold start) before prepare.
+    try {
+      await fetch(
+        `${(import.meta.env.VITE_API_URL || "").replace(/\/$/, "")}/health`
+      );
+    } catch {
+      /* ignore */
+    }
+
     const prepared = await prepareMint({ count, buyerAddress });
     const mode = prepared.mode || "admin";
 
@@ -35,7 +59,6 @@ export async function startPayment({
       boc: result?.boc,
     });
 
-    // Public mint: chain mint is instant-ish, indexer may lag — retry confirm.
     if (mode === "public" && confirmed.status === "paid") {
       for (let i = 0; i < 8; i++) {
         await sleep(3000);
@@ -77,8 +100,7 @@ export async function startPayment({
     };
   } catch (err) {
     console.error(err);
-    const message =
-      err instanceof Error ? err.message : "پرداخت یا مینت لغو شد.";
+    const message = friendlyTonConnectError(err);
     alert(message);
     return { ok: false, error: message };
   }

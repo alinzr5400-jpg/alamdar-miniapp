@@ -2,20 +2,40 @@ const API_BASE = (
   import.meta.env.VITE_API_URL || "/api"
 ).replace(/\/$/, "");
 
-async function request(path, options = {}) {
-  const res = await fetch(`${API_BASE}${path}`, {
-    headers: {
-      "Content-Type": "application/json",
-      ...(options.headers || {}),
-    },
-    ...options,
-  });
+function sleep(ms) {
+  return new Promise((r) => setTimeout(r, ms));
+}
 
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok) {
-    throw new Error(data.error || `Request failed (${res.status})`);
+async function request(path, options = {}, retries = 2) {
+  let lastError;
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      const res = await fetch(`${API_BASE}${path}`, {
+        headers: {
+          "Content-Type": "application/json",
+          ...(options.headers || {}),
+        },
+        ...options,
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data.error || `Request failed (${res.status})`);
+      }
+      return data;
+    } catch (err) {
+      lastError = err;
+      const msg = err instanceof Error ? err.message : String(err);
+      const retryable =
+        /Failed to fetch|NetworkError|timeout|503|502|429/i.test(msg) ||
+        err instanceof TypeError;
+      if (!retryable || attempt === retries) break;
+      await sleep(1500 * (attempt + 1));
+    }
   }
-  return data;
+  throw lastError instanceof Error
+    ? lastError
+    : new Error("Failed to fetch");
 }
 
 export function fetchSaleConfig() {
