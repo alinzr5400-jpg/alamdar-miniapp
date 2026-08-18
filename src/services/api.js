@@ -43,3 +43,7 @@ export function confirmMint({ orderId, boc }) {
 export function fetchNft(id) {
   return request(`/nft/${id}`);
 }
+
+export function fetchWalletHoldings(address) {
+  return request(`/wallet/${encodeURIComponent(address)}/holdings`);
+}

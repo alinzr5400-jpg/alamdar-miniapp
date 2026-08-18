@@ -10,6 +10,8 @@ function BuySection() {
   const minBuy = sale.minBuy ?? MIN_BUY;
   const maxBuy = sale.maxBuy ?? MAX_BUY;
   const price = sale.mintPrice ?? NFT_PRICE;
+  const saleMode = sale.saleMode ?? "admin";
+  const publicGas = Number(sale.publicMintItemGas ?? 0.05);
 
   const [count, setCount] = useState(minBuy);
   const [busy, setBusy] = useState(false);
@@ -23,7 +25,9 @@ function BuySection() {
   }, [minBuy, maxBuy]);
 
   const safeCount = Math.min(Math.max(count, minBuy), maxBuy);
-  const total = Number((safeCount * price).toFixed(4));
+  const unitTotal =
+    saleMode === "public" ? Number((price + publicGas).toFixed(4)) : price;
+  const total = Number((safeCount * unitTotal).toFixed(4));
   const disabled =
     busy ||
     sale.loading ||
@@ -45,7 +49,6 @@ function BuySection() {
         if (result.mintIndices?.length) {
           setLastMinted(result.mintIndices);
         }
-        // Refresh remaining/minted immediately (do not wait for 60s poll)
         await sale.refreshSale?.();
       }
     } finally {
@@ -58,8 +61,18 @@ function BuySection() {
       <span className="section-badge">BUY</span>
       <h2>خرید NFT</h2>
 
+      <p className="buy-label">
+        حالت فروش: {saleMode === "public" ? "PublicMint (مستقیم به قرارداد)" : "Admin"}
+      </p>
+
       <p className="buy-label">قیمت هر NFT</p>
       <h3 className="buy-price">{price} TON</h3>
+
+      {saleMode === "public" && (
+        <p className="countdown-text">
+          در حالت عمومی، حدود {publicGas} TON گاز به‌ازای هر NFT هم اضافه می‌شود.
+        </p>
+      )}
 
       <p className="buy-label">
         باقی‌مانده: {sale.remaining?.toLocaleString?.() ?? "—"} /{" "}
@@ -99,7 +112,7 @@ function BuySection() {
       </div>
 
       <div className="total-box">
-        <small>جمع کل</small>
+        <small>جمع کل{saleMode === "public" ? " (با گاز)" : ""}</small>
         <strong>{total} TON</strong>
       </div>
 
@@ -113,7 +126,9 @@ function BuySection() {
           ? "ابتدا کیف پول را وصل کنید"
           : busy
             ? "در حال پردازش..."
-            : "پرداخت با TON"}
+            : saleMode === "public"
+              ? "مینت مستقیم با TON"
+              : "پرداخت با TON"}
       </button>
     </section>
   );

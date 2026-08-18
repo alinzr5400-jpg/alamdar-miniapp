@@ -1,8 +1,12 @@
 import { prepareMint, confirmMint } from "./api";
 
+function sleep(ms) {
+  return new Promise((r) => setTimeout(r, ms));
+}
+
 /**
  * TonConnect payment → backend confirm/mint.
- * Returns { ok, status, mintIndices } so UI can refresh sale/gallery.
+ * PublicMint may need a few confirm retries while TonAPI indexes the new items.
  */
 export async function startPayment({
   tonConnectUI,
@@ -22,13 +26,26 @@ export async function startPayment({
 
   try {
     const prepared = await prepareMint({ count, buyerAddress });
+    const mode = prepared.mode || "admin";
 
     const result = await tonConnectUI.sendTransaction(prepared.transaction);
 
-    const confirmed = await confirmMint({
+    let confirmed = await confirmMint({
       orderId: prepared.orderId,
       boc: result?.boc,
     });
+
+    // Public mint: chain mint is instant-ish, indexer may lag — retry confirm.
+    if (mode === "public" && confirmed.status === "paid") {
+      for (let i = 0; i < 8; i++) {
+        await sleep(3000);
+        confirmed = await confirmMint({
+          orderId: prepared.orderId,
+          boc: result?.boc,
+        });
+        if (confirmed.status === "minted") break;
+      }
+    }
 
     if (confirmed.status === "minted") {
       const ids = (confirmed.mintIndices || []).join(", ");
@@ -40,15 +57,21 @@ export async function startPayment({
       return {
         ok: true,
         status: "minted",
+        mode,
         mintIndices: confirmed.mintIndices || [],
         orderId: prepared.orderId,
       };
     }
 
-    alert("پرداخت ارسال شد. مینت روی زنجیره در حال پردازش است.");
+    alert(
+      mode === "public"
+        ? "پرداخت به قرارداد ارسال شد. اگر NFT هنوز نیامد، چند ثانیه بعد کیف پول را رفرش کنید."
+        : "پرداخت ارسال شد. مینت روی زنجیره در حال پردازش است."
+    );
     return {
       ok: true,
       status: confirmed.status || "paid",
+      mode,
       mintIndices: [],
       orderId: prepared.orderId,
     };

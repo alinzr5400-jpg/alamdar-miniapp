@@ -12,6 +12,8 @@ const fallback = {
   minted: 0,
   remaining: 16120,
   reveal: false,
+  saleMode: "admin",
+  publicMintItemGas: 0.05,
   saleOpen: true,
   saleStartsAt: null,
   network: "testnet",
