@@ -8,9 +8,11 @@ function friendlyTonConnectError(err) {
   const raw = err instanceof Error ? err.message : String(err);
   if (/getClass\(\)|NullPointerException|null object reference/i.test(raw)) {
     return (
-      "خطای کیف پول اندروید (TonConnect). یک‌بار کیف را Disconnect کنید، دوباره وصل کنید، " +
-      "مطمئن شوید Tonkeeper روی Testnet است، بعد دوباره مینت را بزنید. " +
-      "اگر باز خطا بود، از Tonkeeper دسکتاپ/مرورگر امتحان کنید."
+      "باگ شناخته‌شده Tonkeeper اندروید داخل تلگرام است (نه لزوماً قرارداد).\n\n" +
+      "۱) سایت را در Chrome باز کن (نه داخل تلگرام) و دوباره مینت بزن\n" +
+      "۲) یا از Tonkeeper دسکتاپ تست کن\n" +
+      "۳) Tonkeeper را آپدیت/ری‌اینستال کن و دوباره Connect کن\n\n" +
+      "اگر فوری لازم داری، موقتاً SALE_MODE=admin روی Render بگذار تا خرید از مسیر قبلی کار کند."
     );
   }
   if (/Failed to fetch/i.test(raw)) {
@@ -52,7 +54,12 @@ export async function startPayment({
     const prepared = await prepareMint({ count, buyerAddress });
     const mode = prepared.mode || "admin";
 
-    const result = await tonConnectUI.sendTransaction(prepared.transaction);
+    const result = await tonConnectUI.sendTransaction(prepared.transaction, {
+      // Critical for Telegram Android ↔ Tonkeeper handoff
+      returnStrategy: "back",
+      modals: ["before", "success", "error"],
+      notifications: ["before", "success", "error"],
+    });
 
     let confirmed = await confirmMint({
       orderId: prepared.orderId,
