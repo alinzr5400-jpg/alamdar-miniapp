@@ -62,7 +62,7 @@ function MyNfts() {
         <div>
           <h3>NFTهای من</h3>
           <p>
-            مالکیت از زنجیره خوانده می‌شود
+            فقط NFTهای همین کیف پول (از زنجیره)
             {data ? ` — تعداد: ${data.count}` : ""}.
             {completeSets > 0
               ? ` ست کامل Legendary: ${completeSets}`

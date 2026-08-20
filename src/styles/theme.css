@@ -27,6 +27,7 @@ body {
     linear-gradient(180deg, #050505, #0e0e0e 50%, #080808 100%);
   color: var(--text);
   direction: rtl;
+  overflow-x: hidden;
   overflow-y: auto;
   font-family: "B Titr", "Vazirmatn", Tahoma, sans-serif;
 }
@@ -1015,4 +1016,197 @@ grid-template-columns:1fr;
 
 }
 
+}
+
+/* ========================= */
+/* Mobile / Telegram WebView */
+/* Must stay last so it wins  */
+/* ========================= */
+
+html,
+body,
+#root,
+.app-shell,
+.container,
+.content-stack {
+  max-width: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+.mint-buy-wrapper {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.countdown-card,
+.buy-card,
+.glass {
+  min-width: 0;
+  max-width: 100%;
+}
+
+@media (max-width: 900px) {
+  .app-shell {
+    padding: 12px;
+  }
+
+  .mint-buy-wrapper {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+    margin: 18px 0;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 14px 16px;
+    margin-bottom: 18px;
+  }
+
+  .logo-area {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 12px;
+  }
+
+  .logo-image {
+    width: min(120px, 40vw);
+    height: auto;
+    max-height: 120px;
+    margin: 0;
+  }
+
+  .header-text {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .project-title {
+    font-size: clamp(28px, 9vw, 40px);
+    letter-spacing: 2px;
+    word-break: break-word;
+  }
+
+  .project-verse {
+    font-size: clamp(20px, 6vw, 28px);
+  }
+
+  .project-slogan {
+    font-size: 15px;
+  }
+
+  .project-desc {
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .hero {
+    padding: 16px;
+    text-align: center;
+  }
+
+  .hero h2 {
+    font-size: clamp(28px, 10vw, 40px);
+  }
+
+  .hero h3 {
+    font-size: clamp(16px, 4.5vw, 20px);
+  }
+
+  .hero p {
+    margin: 16px auto;
+    font-size: 14px;
+    line-height: 1.8;
+    max-width: 100%;
+  }
+
+  .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .stat {
+    padding: 14px 10px;
+    min-width: 0;
+  }
+
+  .stat strong {
+    font-size: clamp(18px, 5vw, 24px);
+    word-break: break-word;
+  }
+
+  .stat span {
+    font-size: 12px;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .nft-card {
+    min-width: 0;
+    padding: 10px;
+  }
+
+  .countdown-card,
+  .buy-card {
+    padding: 20px 16px;
+  }
+
+  .time-box {
+    width: 58px;
+    height: 58px;
+  }
+
+  .time-box strong {
+    font-size: 20px;
+  }
+
+  .buy-price {
+    font-size: 28px;
+  }
+
+  .gallery-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .actions {
+    gap: 10px;
+  }
+
+  .gold-btn,
+  .ghost-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 420px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .stats {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .countdown {
+    gap: 6px;
+  }
+
+  .time-box {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+  }
+
+  .dots {
+    font-size: 20px;
+  }
 }

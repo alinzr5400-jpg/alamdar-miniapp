@@ -75,8 +75,9 @@ function BuySection() {
       )}
 
       <p className="buy-label">
-        باقی‌مانده: {sale.remaining?.toLocaleString?.() ?? "—"} /{" "}
-        {sale.totalSupply?.toLocaleString?.() ?? "—"}
+        مینت‌شده: {(sale.minted ?? 0).toLocaleString("en-US")} | باقی‌مانده:{" "}
+        {(sale.remaining ?? 0).toLocaleString("en-US")} از{" "}
+        {(sale.totalSupply ?? 0).toLocaleString("en-US")}
       </p>
 
       {!sale.saleOpen && (
