@@ -55,6 +55,7 @@ function MyNfts() {
 
   const completeSets =
     data?.legendaryProgress?.filter((p) => p.complete)?.length ?? 0;
+  const items = data?.items || [];
 
   return (
     <section className="glass gallery">
@@ -75,12 +76,12 @@ function MyNfts() {
       {loading && <p className="countdown-text">در حال خواندن کیف پول…</p>}
       {error && <p className="countdown-text">{error}</p>}
 
-      {!loading && data?.items?.length === 0 && (
+      {!loading && items.length === 0 && (
         <p className="countdown-text">هنوز NFTای از این کالکشن در کیف پول نیست.</p>
       )}
 
       <div className="grid">
-        {(data?.items || []).slice(0, 12).map((item) => (
+        {items.map((item) => (
           <NFTCard
             key={item.tokenId}
             id={item.tokenId}

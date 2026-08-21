@@ -62,7 +62,10 @@ function BuySection() {
       <h2>خرید NFT</h2>
 
       <p className="buy-label">
-        حالت فروش: {saleMode === "public" ? "PublicMint (مستقیم به قرارداد)" : "Admin"}
+        حالت فروش:{" "}
+        {saleMode === "public"
+          ? "PublicMint (پرداخت مستقیم به قرارداد کالکشن)"
+          : "Admin (پرداخت به کیف پروژه)"}
       </p>
 
       <p className="buy-label">قیمت هر NFT</p>
@@ -70,7 +73,8 @@ function BuySection() {
 
       {saleMode === "public" && (
         <p className="countdown-text">
-          در حالت عمومی، حدود {publicGas} TON گاز به‌ازای هر NFT هم اضافه می‌شود.
+          در حالت PublicMint، TON به آدرس کالکشن می‌رود (نه کیف خزانه جدا). حدود{" "}
+          {publicGas} TON گاز به‌ازای هر NFT هم اضافه می‌شود.
         </p>
       )}
 
