@@ -21,13 +21,15 @@ function Countdown() {
     return Math.max(sale.saleStartsAt - now, 0);
   }, [sale.saleStartsAt, now]);
 
+  const showTimer = Boolean(sale.saleStartsAt) && !sale.saleOpen && remaining > 0;
+
   const days = Math.floor(remaining / 86400);
   const hours = Math.floor((remaining % 86400) / 3600);
   const minutes = Math.floor((remaining % 3600) / 60);
   const seconds = remaining % 60;
 
   const statusText = sale.saleOpen
-    ? "فروش فعال است."
+    ? "فروش فعال است — می‌توانید مینت کنید."
     : sale.saleStartsAt
       ? "زمان باقی‌مانده تا شروع فروش"
       : "زمان فروش از سرور دریافت می‌شود.";
@@ -37,29 +39,39 @@ function Countdown() {
       <span className="section-badge">MINT</span>
       <h2>{sale.saleOpen ? "فروش آغاز شده" : "شروع فروش"}</h2>
 
-      <div className="countdown">
-        <div className="time-box">
-          <strong>{pad(days)}</strong>
-          <span>روز</span>
+      {showTimer ? (
+        <div className="countdown">
+          <div className="time-box">
+            <strong>{pad(days)}</strong>
+            <span>روز</span>
+          </div>
+          <span className="dots">:</span>
+          <div className="time-box">
+            <strong>{pad(hours)}</strong>
+            <span>ساعت</span>
+          </div>
+          <span className="dots">:</span>
+          <div className="time-box">
+            <strong>{pad(minutes)}</strong>
+            <span>دقیقه</span>
+          </div>
+          <span className="dots">:</span>
+          <div className="time-box">
+            <strong>{pad(seconds)}</strong>
+            <span>ثانیه</span>
+          </div>
         </div>
-        <span className="dots">:</span>
-        <div className="time-box">
-          <strong>{pad(hours)}</strong>
-          <span>ساعت</span>
+      ) : (
+        <div className="sale-live-panel">
+          <strong className="sale-live-label">
+            {sale.saleOpen ? "LIVE" : "STANDBY"}
+          </strong>
+          <p className="countdown-text">{statusText}</p>
         </div>
-        <span className="dots">:</span>
-        <div className="time-box">
-          <strong>{pad(minutes)}</strong>
-          <span>دقیقه</span>
-        </div>
-        <span className="dots">:</span>
-        <div className="time-box">
-          <strong>{pad(seconds)}</strong>
-          <span>ثانیه</span>
-        </div>
-      </div>
+      )}
 
-      <p className="countdown-text">{statusText}</p>
+      {showTimer && <p className="countdown-text">{statusText}</p>}
+
       <p className="countdown-text">
         مینت‌شده: {(sale.minted ?? 0).toLocaleString("en-US")} | شبکه:{" "}
         {sale.network ?? "—"} | Reveal:{" "}

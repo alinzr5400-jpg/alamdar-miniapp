@@ -3,7 +3,8 @@ import Hero from "../components/Hero";
 import Countdown from "../components/Countdown";
 import BuySection from "../components/BuySection";
 import MyNfts from "../components/MyNfts";
-import Gallery from "../components/Gallery";
+import Showcase from "../components/Showcase";
+import Martyrs from "../components/Martyrs";
 import Rules from "../components/Rules";
 import About from "../components/About";
 import Footer from "../components/Footer";
@@ -20,7 +21,8 @@ function HomePage() {
       </div>
 
       <MyNfts />
-      <Gallery />
+      <Showcase />
+      <Martyrs />
       <Rules />
       <About />
       <Footer />

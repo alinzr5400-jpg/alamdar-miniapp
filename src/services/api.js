@@ -42,8 +42,18 @@ export function fetchSaleConfig() {
   return request("/sale");
 }
 
-export function fetchGallery(limit = 6) {
-  return request(`/gallery?limit=${limit}`);
+export function fetchShowcase() {
+  return request("/showcase");
+}
+
+/** @deprecated use fetchShowcase — /gallery now returns curated showcase */
+export function fetchGallery() {
+  return fetchShowcase();
+}
+
+export function fetchMartyrs(q = "") {
+  const query = q ? `?q=${encodeURIComponent(q)}` : "";
+  return request(`/martyrs${query}`);
 }
 
 export function prepareMint({ count, buyerAddress }) {

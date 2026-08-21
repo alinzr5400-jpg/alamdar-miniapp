@@ -1,3 +1,4 @@
+import { useState } from "react";
 import ConnectWallet from "./ConnectWallet";
 import WalletInfo from "./WalletInfo";
 import { useSale } from "../context/SaleContext";
@@ -5,6 +6,7 @@ import { TOTAL_NFT, NFT_PRICE, MIN_BUY, MAX_BUY } from "../config/constants";
 
 function Hero() {
   const sale = useSale();
+  const [showHelp, setShowHelp] = useState(false);
   const total = sale.totalSupply ?? TOTAL_NFT;
   const price = sale.mintPrice ?? NFT_PRICE;
   const minBuy = sale.minBuy ?? MIN_BUY;
@@ -12,7 +14,7 @@ function Hero() {
   const revealed = Boolean(sale.reveal);
 
   return (
-    <section className="glass hero">
+    <section className="glass hero" id="hero">
       <span className="badge">ALAMDAR NFT COLLECTION</span>
 
       <h2>علمدار</h2>
@@ -52,10 +54,25 @@ function Hero() {
       <div className="actions">
         <ConnectWallet />
 
-        <button type="button" className="ghost-btn">
-          آموزش اتصال
+        <button
+          type="button"
+          className="ghost-btn"
+          onClick={() => setShowHelp((v) => !v)}
+        >
+          {showHelp ? "بستن آموزش" : "آموزش اتصال"}
         </button>
       </div>
+
+      {showHelp && (
+        <div className="connect-help" id="connect-help">
+          <ol className="rules-list">
+            <li>کیف پول را روی <strong>Testnet</strong> بگذارید (نه Mainnet).</li>
+            <li>دکمه اتصال را بزنید و Tonkeeper را انتخاب کنید.</li>
+            <li>حداقل خرید {minBuy} NFT است؛ برای {minBuy}×{price} TON + گاز آماده باشید.</li>
+            <li>بعد از مینت، بخش «NFTهای من» دارایی همین کیف را نشان می‌دهد.</li>
+          </ol>
+        </div>
+      )}
 
       <WalletInfo />
     </section>
