@@ -3,7 +3,7 @@ export const PROJECT = {
   NETWORK: "testnet",
   NFT_PRICE: 0.5,
   MIN_BUY: 2,
-  MAX_BUY: 10,
+  MAX_BUY: 88,
   TOTAL_SUPPLY: 16120,
   COLLECTION_NAME: "Alamdar NFT",
   SYMBOL: "ALM",
