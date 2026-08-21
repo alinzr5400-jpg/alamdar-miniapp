@@ -38,7 +38,7 @@ function MyNfts() {
     return () => {
       alive = false;
     };
-  }, [connected, buyerAddress, sale.minted, sale.reveal]);
+  }, [connected, buyerAddress, sale.minted, sale.reveal, sale.holdingsEpoch]);
 
   if (!connected) {
     return (
@@ -63,11 +63,13 @@ function MyNfts() {
         <div>
           <h3>NFTهای من</h3>
           <p>
-            فقط NFTهای همین کیف پول (از زنجیره)
+            فقط NFTهای کالکشن فعلی در همین کیف‌پول
             {data ? ` — تعداد: ${data.count}` : ""}.
             {completeSets > 0
               ? ` ست کامل Legendary: ${completeSets}`
               : ""}
+            {" "}
+            اگر در Tonkeeper کارت‌های قدیمی‌تر می‌بینی، مال کالکشن تست قبلی است.
           </p>
         </div>
         <span className="badge">{data?.count ?? 0} NFT</span>

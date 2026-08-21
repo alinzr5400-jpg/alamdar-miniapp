@@ -1,4 +1,4 @@
-import { prepareMint, confirmMint } from "./api";
+import { prepareMint, confirmMint, fetchMintOrder } from "./api";
 
 function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
@@ -11,8 +11,7 @@ function friendlyTonConnectError(err) {
       "باگ شناخته‌شده Tonkeeper اندروید داخل تلگرام است (نه لزوماً قرارداد).\n\n" +
       "۱) سایت را در Chrome باز کن (نه داخل تلگرام) و دوباره مینت بزن\n" +
       "۲) یا از Tonkeeper دسکتاپ تست کن\n" +
-      "۳) Tonkeeper را آپدیت/ری‌اینستال کن و دوباره Connect کن\n\n" +
-      "اگر فوری لازم داری، موقتاً SALE_MODE=admin روی Render بگذار تا خرید از مسیر قبلی کار کند."
+      "۳) Tonkeeper را آپدیت/ری‌اینستال کن و دوباره Connect کن"
     );
   }
   if (/Failed to fetch/i.test(raw)) {
@@ -23,14 +22,19 @@ function friendlyTonConnectError(err) {
 
 /**
  * TonConnect payment → backend confirm/mint.
- * PublicMint may need a few confirm retries while TonAPI indexes the new items.
+ * PublicMint may need confirm polls while TonAPI indexes the new items.
  */
 export async function startPayment({
   tonConnectUI,
   connected,
   count,
   buyerAddress,
+  onProgress,
 }) {
+  const progress = (msg) => {
+    if (typeof onProgress === "function") onProgress(msg);
+  };
+
   if (!connected) {
     alert("ابتدا کیف پول را متصل کنید.");
     return { ok: false };
@@ -42,7 +46,7 @@ export async function startPayment({
   }
 
   try {
-    // Wake backend (Render free cold start) before prepare.
+    progress("در حال آماده‌سازی تراکنش…");
     try {
       await fetch(
         `${(import.meta.env.VITE_API_URL || "").replace(/\/$/, "")}/health`
@@ -54,31 +58,50 @@ export async function startPayment({
     const prepared = await prepareMint({ count, buyerAddress });
     const mode = prepared.mode || "admin";
 
+    progress("در انتظار تأیید در کیف پول…");
     const result = await tonConnectUI.sendTransaction(prepared.transaction, {
-      // Critical for Telegram Android ↔ Tonkeeper handoff
       returnStrategy: "back",
       modals: ["before", "success", "error"],
       notifications: ["before", "success", "error"],
     });
 
+    progress("پرداخت ارسال شد — در حال تأیید مینت…");
     let confirmed = await confirmMint({
       orderId: prepared.orderId,
       boc: result?.boc,
     });
 
-    if (mode === "public" && confirmed.status === "paid") {
-      for (let i = 0; i < 8; i++) {
+    if (mode === "public" && confirmed.status !== "minted") {
+      // ~90s total; each confirm is short on the server now.
+      for (let i = 0; i < 30; i++) {
+        progress(
+          `در انتظار تأیید زنجیره… (${i + 1}/30) — صفحه را باز نگه دارید`
+        );
         await sleep(3000);
         confirmed = await confirmMint({
           orderId: prepared.orderId,
           boc: result?.boc,
         });
         if (confirmed.status === "minted") break;
+
+        try {
+          const order = await fetchMintOrder(prepared.orderId);
+          if (order?.status === "minted" && Array.isArray(order.mintIndices)) {
+            confirmed = {
+              status: "minted",
+              mintIndices: order.mintIndices,
+            };
+            break;
+          }
+        } catch {
+          /* ignore */
+        }
       }
     }
 
     if (confirmed.status === "minted") {
       const ids = (confirmed.mintIndices || []).join(", ");
+      progress("");
       alert(
         ids
           ? `خرید موفق بود. NFTهای شما: #${ids}`
@@ -93,9 +116,10 @@ export async function startPayment({
       };
     }
 
+    progress("");
     alert(
       mode === "public"
-        ? "پرداخت به قرارداد ارسال شد. اگر NFT هنوز نیامد، چند ثانیه بعد کیف پول را رفرش کنید."
+        ? "پرداخت ثبت شد. اگر لیست NFT هنوز کامل نیست، ۱۰–۲۰ ثانیه صبر کنید یا یک‌بار رفرش کنید."
         : "پرداخت ارسال شد. مینت روی زنجیره در حال پردازش است."
     );
     return {
@@ -107,6 +131,7 @@ export async function startPayment({
     };
   } catch (err) {
     console.error(err);
+    progress("");
     const message = friendlyTonConnectError(err);
     alert(message);
     return { ok: false, error: message };

@@ -21,6 +21,7 @@ const fallback = {
   paymentAddress: null,
   loading: true,
   error: null,
+  holdingsEpoch: 0,
 };
 
 export function SaleProvider({ children }) {
@@ -29,12 +30,13 @@ export function SaleProvider({ children }) {
   const refreshSale = useCallback(async () => {
     try {
       const data = await fetchSaleConfig();
-      setSale({
+      setSale((prev) => ({
         ...fallback,
         ...data,
+        holdingsEpoch: prev.holdingsEpoch,
         loading: false,
         error: null,
-      });
+      }));
       return data;
     } catch (err) {
       setSale((prev) => ({
@@ -46,6 +48,13 @@ export function SaleProvider({ children }) {
     }
   }, []);
 
+  const refreshHoldings = useCallback(() => {
+    setSale((prev) => ({
+      ...prev,
+      holdingsEpoch: (prev.holdingsEpoch || 0) + 1,
+    }));
+  }, []);
+
   useEffect(() => {
     let alive = true;
 
@@ -53,12 +62,13 @@ export function SaleProvider({ children }) {
       try {
         const data = await fetchSaleConfig();
         if (!alive) return;
-        setSale({
+        setSale((prev) => ({
           ...fallback,
           ...data,
+          holdingsEpoch: prev.holdingsEpoch,
           loading: false,
           error: null,
-        });
+        }));
       } catch (err) {
         if (!alive) return;
         setSale((prev) => ({
@@ -78,7 +88,7 @@ export function SaleProvider({ children }) {
   }, []);
 
   return (
-    <SaleContext.Provider value={{ ...sale, refreshSale }}>
+    <SaleContext.Provider value={{ ...sale, refreshSale, refreshHoldings }}>
       {children}
     </SaleContext.Provider>
   );

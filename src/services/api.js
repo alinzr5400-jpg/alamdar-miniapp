@@ -70,6 +70,10 @@ export function confirmMint({ orderId, boc }) {
   });
 }
 
+export function fetchMintOrder(orderId) {
+  return request(`/mint/order/${encodeURIComponent(orderId)}`);
+}
+
 export function fetchNft(id) {
   return request(`/nft/${id}`);
 }

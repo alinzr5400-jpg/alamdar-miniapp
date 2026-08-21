@@ -15,6 +15,7 @@ function BuySection() {
 
   const [count, setCount] = useState(minBuy);
   const [busy, setBusy] = useState(false);
+  const [status, setStatus] = useState("");
   const [lastMinted, setLastMinted] = useState([]);
   const { connected } = useWalletContext();
   const [tonConnectUI] = useTonConnectUI();
@@ -37,12 +38,14 @@ function BuySection() {
 
   const handlePayment = async () => {
     setBusy(true);
+    setStatus("");
     try {
       const result = await startPayment({
         tonConnectUI,
         connected,
         count: safeCount,
         buyerAddress,
+        onProgress: setStatus,
       });
 
       if (result?.ok) {
@@ -50,9 +53,14 @@ function BuySection() {
           setLastMinted(result.mintIndices);
         }
         await sale.refreshSale?.();
+        sale.refreshHoldings?.();
+        // TonAPI sometimes lags — refresh holdings again shortly after.
+        setTimeout(() => sale.refreshHoldings?.(), 4000);
+        setTimeout(() => sale.refreshHoldings?.(), 12000);
       }
     } finally {
       setBusy(false);
+      setStatus("");
     }
   };
 
@@ -97,6 +105,8 @@ function BuySection() {
           آخرین مینت شما: #{lastMinted.join(", #")}
         </p>
       )}
+
+      {status && <p className="countdown-text">{status}</p>}
 
       <div className="counter">
         <button
