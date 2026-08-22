@@ -100,7 +100,9 @@ export async function startPayment({
     }
 
     if (confirmed.status === "minted") {
-      const ids = (confirmed.mintIndices || []).join(", ");
+      const ids = (confirmed.mintIndices || [])
+        .map((id) => Number(id) + 1)
+        .join(", #");
       progress("");
       alert(
         ids

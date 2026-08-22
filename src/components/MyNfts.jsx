@@ -3,6 +3,7 @@ import { useTonAddress } from "@tonconnect/ui-react";
 import { useWalletContext } from "../context/WalletContext";
 import { useSale } from "../context/SaleContext";
 import { fetchWalletHoldings } from "../services/api";
+import { displayNftNo } from "../config/constants";
 import NFTCard from "./NFTCard";
 
 function MyNfts() {
@@ -87,7 +88,7 @@ function MyNfts() {
           <NFTCard
             key={item.tokenId}
             id={item.tokenId}
-            name={item.name || `Alamdar #${item.tokenId}`}
+            name={item.name || `Alamdar #${displayNftNo(item.tokenId)}`}
             role={item.rarity || (sale.reveal ? "—" : "Hidden")}
             rarity={item.rarity || (sale.reveal ? "—" : "Hidden")}
             image={item.image || sale.hiddenImage}

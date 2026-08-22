@@ -3,7 +3,7 @@ import { useTonConnectUI, useTonAddress } from "@tonconnect/ui-react";
 import { useWalletContext } from "../context/WalletContext";
 import { useSale } from "../context/SaleContext";
 import { startPayment } from "../services/paymentService";
-import { MIN_BUY, MAX_BUY, NFT_PRICE } from "../config/constants";
+import { MIN_BUY, MAX_BUY, NFT_PRICE, displayNftNo } from "../config/constants";
 
 function BuySection() {
   const sale = useSale();
@@ -102,7 +102,7 @@ function BuySection() {
 
       {lastMinted.length > 0 && (
         <p className="countdown-text">
-          آخرین مینت شما: #{lastMinted.join(", #")}
+          آخرین مینت شما: #{lastMinted.map(displayNftNo).join(", #")}
         </p>
       )}
 

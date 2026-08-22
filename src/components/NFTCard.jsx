@@ -1,3 +1,5 @@
+import { displayNftNo } from "../config/constants";
+
 function rarityClass(rarity) {
   const key = String(rarity || "").toLowerCase();
   if (key === "legendary") return "rarity-legendary";
@@ -42,7 +44,7 @@ function NFTCard({ id, name, role, rarity, image }) {
   return (
     <article className={`nft-card ${tier}`}>
       <div className="nft-card-top">
-        <div className="nft-id">#{id}</div>
+        <div className="nft-id">#{displayNftNo(id)}</div>
         <span className={`badge ${tier}`}>{rarity || role || "—"}</span>
       </div>
 
