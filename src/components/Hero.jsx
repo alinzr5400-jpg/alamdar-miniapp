@@ -22,11 +22,11 @@ function Hero() {
       <h3>خیمه دیجیتال روایت‌های ماندگار شهدای ایران</h3>
 
       <p>
-        مجموعه کلکسیونی شامل {total.toLocaleString("fa-IR")} NFT بر بستر TON —
-        Legendary، Mythic و Unique.
+        {total.toLocaleString("fa-IR")} کارت کلکسیونی در سه رده Legendary، Mythic
+        و Unique
         {revealed
-          ? " Reveal فعال است؛ کارت‌های مینت‌شده با تصویر واقعی دیده می‌شوند."
-          : " تا قبل از Reveal تصاویر مخفی هستند."}
+          ? " — کارت‌های خریداری‌شده با تصویر واقعی دیده می‌شوند."
+          : " — تا رونمایی، تصاویر مخفی است."}
       </p>
 
       <div className="stats">

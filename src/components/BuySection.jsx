@@ -69,22 +69,8 @@ function BuySection() {
       <span className="section-badge">BUY</span>
       <h2>خرید NFT</h2>
 
-      <p className="buy-label">
-        حالت فروش:{" "}
-        {saleMode === "public"
-          ? "PublicMint (پرداخت مستقیم به قرارداد کالکشن)"
-          : "Admin (پرداخت به کیف پروژه)"}
-      </p>
-
       <p className="buy-label">قیمت هر NFT</p>
       <h3 className="buy-price">{price} TON</h3>
-
-      {saleMode === "public" && (
-        <p className="countdown-text">
-          در حالت PublicMint، TON به آدرس کالکشن می‌رود (نه کیف خزانه جدا). حدود{" "}
-          {publicGas} TON گاز به‌ازای هر NFT هم اضافه می‌شود.
-        </p>
-      )}
 
       <p className="buy-label">
         مینت‌شده: {(sale.minted ?? 0).toLocaleString("en-US")} | باقی‌مانده:{" "}
@@ -127,7 +113,7 @@ function BuySection() {
       </div>
 
       <div className="total-box">
-        <small>جمع کل{saleMode === "public" ? " (با گاز)" : ""}</small>
+        <small>جمع کل</small>
         <strong>{total} TON</strong>
       </div>
 
@@ -141,9 +127,7 @@ function BuySection() {
           ? "ابتدا کیف پول را وصل کنید"
           : busy
             ? "در حال پردازش..."
-            : saleMode === "public"
-              ? "مینت مستقیم با TON"
-              : "پرداخت با TON"}
+            : "پرداخت با TON"}
       </button>
     </section>
   );
