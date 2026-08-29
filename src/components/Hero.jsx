@@ -2,7 +2,13 @@ import { useState } from "react";
 import ConnectWallet from "./ConnectWallet";
 import WalletInfo from "./WalletInfo";
 import { useSale } from "../context/SaleContext";
-import { TOTAL_NFT, NFT_PRICE, MIN_BUY, MAX_BUY } from "../config/constants";
+import {
+  TOTAL_NFT,
+  TOTAL_CHARACTERS,
+  NFT_PRICE,
+  MIN_BUY,
+  MAX_BUY,
+} from "../config/constants";
 
 function Hero() {
   const sale = useSale();
@@ -11,7 +17,6 @@ function Hero() {
   const price = sale.mintPrice ?? NFT_PRICE;
   const minBuy = sale.minBuy ?? MIN_BUY;
   const maxBuy = sale.maxBuy ?? MAX_BUY;
-  const revealed = Boolean(sale.reveal);
 
   return (
     <section className="glass hero" id="hero">
@@ -22,11 +27,9 @@ function Hero() {
       <h3>خیمه دیجیتال روایت‌های ماندگار شهدای ایران</h3>
 
       <p>
-        {total.toLocaleString("fa-IR")} کارت کلکسیونی در سه رده Legendary، Mythic
-        و Unique
-        {revealed
-          ? " — کارت‌های خریداری‌شده با تصویر واقعی دیده می‌شوند."
-          : " — تا رونمایی، تصاویر مخفی است."}
+        مجموعه‌ای از {total.toLocaleString("fa-IR")} کارت کلکسیونی برای زنده نگه
+        داشتن روایت {TOTAL_CHARACTERS.toLocaleString("fa-IR")} شهید؛ هر کارت،
+        یک یادگار دیجیتال از این روایت‌هاست.
       </p>
 
       <div className="stats">
